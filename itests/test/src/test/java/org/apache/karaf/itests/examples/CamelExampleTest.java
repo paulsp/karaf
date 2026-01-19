@@ -56,6 +56,8 @@ public class CamelExampleTest extends BaseTest {
         while (!output.contains("Started")) {
             Thread.sleep(500);
             output = executeCommand("camel:route-list");
+        System.out.println("xxx: "+output);
+        System.out.println("bundle:list");
         }
         System.out.println(output);
 

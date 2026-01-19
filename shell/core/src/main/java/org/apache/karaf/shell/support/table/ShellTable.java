@@ -174,18 +174,23 @@ public class ShellTable {
     }
 
     private Charset getEncoding(PrintStream ps) {
+	    System.out.println("getEncoding() - Begin");
         if (ps.getClass() == ThreadPrintStream.class) {
             try {
                 return ((Terminal) Job.Utils.current().session().get(".jline.terminal")).encoding();
             } catch (Throwable t) {
                 // ignore
-            }
+	    System.out.println(String.format("getEncoding() - From ThreadPrintStream encoding(): %s ", t.getMessage()));
+            
+	    };
             try {
                 ps = (PrintStream) ps.getClass().getMethod("getCurrent").invoke(ps);
             } catch (Throwable t) {
                 // ignore
+	    System.out.println(String.format("getEncoding() - From ThreadPrintStream invoke(): %s ", t.getMessage()));
             }
         }
+	    System.out.println("getEncoding() - get encoding from PS");
         try {
             Field f = ps.getClass().getDeclaredField("charOut");
             f.setAccessible(true);
@@ -193,7 +198,9 @@ public class ShellTable {
             return Charset.forName(osw.getEncoding());
         } catch (Throwable t) {
             // ignore
+	    System.out.println(String.format("getEncoding() - getDeclaredField(): %s ", t.getMessage()));
         }
+	    System.out.println("getEncoding() - end");
         return null;
     }
 
